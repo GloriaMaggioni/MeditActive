@@ -1,0 +1,1 @@
+// logica relativa ai dati deli intervalli dei goals
