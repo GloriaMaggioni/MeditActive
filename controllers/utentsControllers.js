@@ -2,17 +2,27 @@
 
 const connection = require('../config/db');
 
-connection.query(' SELECT * FROM utents', (err, result) =>{
+
+const getAllUtents = (res,req) =>{
+    connection.query(' SELECT * FROM utents', (err, result) =>{
     if(err){
         res.status(500).json({message: 'Errore nella query per i dati utenti', err})
         return;
     }else {
         res.status(200).json({
-            message: 'Connessione avvenuta con successo'
+            message: 'Connessione avvenuta con successo',
+            data: result = {
+                name: string ,
+                surname: string,
+                email: string,
+            }
             
         })
     }
 });
 
 
-module.exports = connection
+}
+
+console.log(getAllUtents)
+module.exports = { getAllUtents}
