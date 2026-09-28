@@ -1,10 +1,10 @@
 // logica relativa ai dati utenti
 
-const connection = require('../config/db');
+import { query } from '../config/db';
 
 
 const getAllUtents = (res,req) =>{
-    connection.query(' SELECT * FROM utents', (err, result) =>{
+    query(' SELECT * FROM utents', (err, result) =>{
     if(err){
         res.status(500).json({message: 'Errore nella query per i dati utenti', err})
         return;
@@ -21,8 +21,9 @@ const getAllUtents = (res,req) =>{
     }
 });
 
+console.log(getAllUtents())
+
 
 }
 
-console.log(getAllUtents)
-module.exports = { getAllUtents}
+export default { getAllUtents}

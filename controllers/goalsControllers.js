@@ -1,8 +1,8 @@
 // logica relativa ai dati dei goals
-const connection = require('../config/db')
+import connection, { query } from '../config/db';
 
 
-connection.query(' SELECT * FROM goals', (err, result) =>{
+query(' SELECT * FROM goals', (err, result) =>{
     if(err){
         res.status(500).json({message: 'Errore nella query per i dati sui goals', err})
         return;
@@ -15,4 +15,4 @@ connection.query(' SELECT * FROM goals', (err, result) =>{
 });
 
 
-module.exports = connection;
+export default connection;

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "nodemon indes.js"
+    "dev": "nodemon index.js"
   },
   "repository": {
     "type": "git",
@@ -14,7 +14,8 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "type": "commonjs",
+  "type": "module",
+  
   "bugs": {
     "url": "https://github.com/GloriaMaggioni/MeditActive/issues"
   },

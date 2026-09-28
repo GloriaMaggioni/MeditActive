@@ -3,12 +3,12 @@
 
 //SOLO ROUTES NON LOGICA
 
-const express = require('express');
-const router = express.Router()
-const utentiControllers = require('../controllers/utentsControllers.js')
+import { Router } from 'express';
+const router = Router()
+import { getAllUtents } from '../controllers/utentsControllers.js';
 
 
-router.get('/', utentiControllers.getAllUtents);
+router.get('/', getAllUtents);
 //getAllUtents metodo da creare in utentsController per prendere i dati degli utenti
 
-module.exports = router
+export default router

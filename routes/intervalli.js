@@ -1,9 +1,10 @@
 // routes per prendere i dati relativi agli intervalli di tempo degli obiettivi
 
-const express = require('express');
-const router = express.Router()
-const intervalliControllers = require('../controllers/intervalliControllers.js')
+import { Router } from 'express';
+import { getAllIntervalli } from '../controllers/intervalliControllers.js';
 
-router.get('/', intervalliControllers.getAllIntervalli());
+const router = Router()
 
-module.exports = router
+router.get('/', getAllIntervalli());
+
+export default router

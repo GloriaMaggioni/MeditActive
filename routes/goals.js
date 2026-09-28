@@ -1,9 +1,9 @@
 // routes per prendere i dati relativi agli obiettivi
 
-const express = require('express');
-const router = express.Router()
-const goalsControllers = require('../controllers/goalsControllers.js')
+import { Router } from 'express';
+const router = Router()
+import { getAllGoals } from '../controllers/goalsControllers.js';
 
-router.get('/', goalsControllers.getAllGoals())
+router.get('/', getAllGoals())
 
-module.exports = router
+export default router

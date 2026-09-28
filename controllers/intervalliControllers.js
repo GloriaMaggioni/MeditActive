@@ -2,9 +2,9 @@
 
 //tradurre tutto in inglese
 
-const connection = require('../config/db');
+import connection, { query } from '../config/db';
 
-connection.query(' SELECT * FROM intervalli', (err, result) =>{
+query(' SELECT * FROM intervalli', (err, result) =>{
     if(err){
         res.status(500).json({message: 'Errore nella query per i dati sugli intervalli dei goals', err})
         return;
@@ -17,4 +17,4 @@ connection.query(' SELECT * FROM intervalli', (err, result) =>{
 });
 
 
-module.exports = connection;
+export default connection;
