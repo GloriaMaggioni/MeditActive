@@ -1,29 +1,38 @@
 // logica relativa ai dati utenti
 
-import { query } from '../config/db';
+import pool from '../config/db.js'
+//obj : prendere i dati degli utento
 
 
-const getAllUtents = (res,req) =>{
-    query(' SELECT * FROM utents', (err, result) =>{
-    if(err){
-        res.status(500).json({message: 'Errore nella query per i dati utenti', err})
-        return;
-    }else {
-        res.status(200).json({
-            message: 'Connessione avvenuta con successo',
-            data: result = {
-                name: string ,
-                surname: string,
-                email: string,
-            }
-            
-        })
+
+ const  getAllUtents = async (req, res) =>{
+    try{
+        const [rows] = await pool.query('SELECT * FROM utents')
+        res.json(rows);
+        console.log(rows)
+        
+    }catch(err){
+        res.status(500).json({
+            err: 'Errore nella query',    
+        });
+        console.log('Errore nella query in utentsControllers', err)
+        
     }
-});
-
-console.log(getAllUtents())
-
-
+    
 }
 
-export default { getAllUtents}
+
+const getUtentId = async  (req,res) =>{
+    try{
+        const utentId = req.params.id;
+        const [rows] = await pool.query( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
+        res.json(rows)
+        console.log('Id dell utente scelto', rows)
+    }catch(err){
+        res.status(500).json({
+            err: 'Errore nel prendere id',
+        })
+    }
+}
+
+export default {getAllUtents, getUtentId}

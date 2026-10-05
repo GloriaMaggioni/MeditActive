@@ -1,8 +1,12 @@
-import express, { json } from 'express';
-import db from './config/db.js'
+import express from 'express';
+// import db from './config/db.js';
+import router from './routes/utents.js'
 
 var app = express();
-app.use(json());
+
+app.use(express.json());
+app.use('/utents', router);
+
 
 const port = 3000;
 
@@ -16,11 +20,3 @@ app.listen(port, () =>{
     console.log('Server da Nodejs ')
 })
 
-
-// //chiude la connessione al db(altrimenti rimane sempre aperta)
-// process.on('SIGINT', () =>{
-//     connection.end(() =>{
-//         console.log('Connessione al db chiusa');
-//         process.exit(0)
-//     })
-// })

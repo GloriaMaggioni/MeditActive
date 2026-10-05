@@ -12,14 +12,8 @@ const pool = createPool({
 
 }).promise()
 
-async function getUtents(){
-    const result = await pool.query('SELECT * FROM utents')
-   return result
 
-}
 
-const utents = await getUtents()
-console.log(utents)
 
 
 

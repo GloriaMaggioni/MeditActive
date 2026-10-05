@@ -4,11 +4,13 @@
 //SOLO ROUTES NON LOGICA
 
 import { Router } from 'express';
-const router = Router()
-import { getAllUtents } from '../controllers/utentsControllers.js';
+import utentsControllers from '../controllers/utentsControllers.js';
 
+ const router = Router()
 
-router.get('/', getAllUtents);
+// router.get(percorso,funzione)
+router.get('/', utentsControllers.getAllUtents);
 //getAllUtents metodo da creare in utentsController per prendere i dati degli utenti
+router.get('/:id', utentsControllers.getUtentId)
 
 export default router
