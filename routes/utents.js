@@ -13,4 +13,9 @@ router.get('/', utentsControllers.getAllUtents);
 //getAllUtents metodo da creare in utentsController per prendere i dati degli utenti
 router.get('/:id', utentsControllers.getUtentId)
 
+
+// creare un nuovo utente con POST
+
+router.post('/', utentsControllers.addNewUtent);
+
 export default router

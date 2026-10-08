@@ -34,14 +34,31 @@ const getUtentId = async  (req,res) =>{
             })
             return;
         }
-             res.json(rows)
-            console.log('Id dell utente scelto', rows[0])
+             res.json(rows[0])
+             console.log('Id dell utente scelto', rows[0])
         
         
     }catch(error){
         res.status(500).json({
             error: 'Errore nella query per id ',
         })
+        console.log('Errore nek cercare id',error)
+    }
+}
+
+
+
+const addNewUtent = async (req, res) =>{
+    try{
+        const {name, surname,email} = req.body
+        const newUtent = await pool.query('INSERT INTO utents (name,surname,email) VALUES (?,?,?)', [name,surname,email]);
+        res.json(newUtent)
+        console.log('Nuovo utente', newUtent)
+    }catch(error){
+        res.status(500).json({
+            error: 'Utent not valid'
+        })
+        console.log('Errore nella creazione del nuovo utente')
     }
 }
 
