@@ -26,11 +26,21 @@ const getUtentId = async  (req,res) =>{
     try{
         const utentId = req.params.id;
         const [rows] = await pool.query( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
-        res.json(rows)
-        console.log('Id dell utente scelto', rows)
-    }catch(err){
+
+        if (rows.length === 0){
+            // persona non esiste,cosa fare
+            res.status(404).json({
+                error: 'Utent not found'
+            })
+            return;
+        }
+             res.json(rows)
+            console.log('Id dell utente scelto', rows[0])
+        
+        
+    }catch(error){
         res.status(500).json({
-            err: 'Errore nel prendere id',
+            error: 'Errore nella query per id ',
         })
     }
 }
