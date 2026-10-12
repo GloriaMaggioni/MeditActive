@@ -4,10 +4,10 @@ import pool from '../config/db.js'
 //obj : prendere i dati degli utento
 
 
-
+// method to get all utents
  const  getAllUtents = async (req, res) =>{
     try{
-        const [rows] = await pool.query('SELECT * FROM utents')
+        const [rows] = await pool.execute('SELECT * FROM utents')
         res.json(rows);
         console.log(rows)
         
@@ -19,13 +19,13 @@ import pool from '../config/db.js'
         
     }
     
-}
+};
 
-
+// method to get the specifi utents's ID
 const getUtentId = async  (req,res) =>{
     try{
         const utentId = req.params.id;
-        const [rows] = await pool.query( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
+        const [rows] = await pool.execute( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
 
         if (rows.length === 0){
             // persona non esiste,cosa fare
@@ -44,22 +44,35 @@ const getUtentId = async  (req,res) =>{
         })
         console.log('Errore nek cercare id',error)
     }
-}
+};
 
 
-
+// method to create new utent on the db
 const addNewUtent = async (req, res) =>{
+    
     try{
-        const {name, surname,email} = req.body
-        const newUtent = await pool.query('INSERT INTO utents (name,surname,email) VALUES (?,?,?)', [name,surname,email]);
-        res.json(newUtent)
-        console.log('Nuovo utente', newUtent)
+        const {name,surname,email} = req.body
+        if(!name || !surname || !email){
+            res.status(400).json({
+                messagge: 'Inserire dati in modo corretto'
+            })
+            return;
+        }else{
+        const [newUtent] = await pool.execute('INSERT INTO utents (name,surname,email) VALUES (?,?,?)', [name,surname,email]);
+        console.log('Nuovo utente:', newUtent)
+        res.status(201).json({
+           id : newUtent.insertId,
+           name: name,
+           surname: surname,
+           email:email
+        })
+        }
     }catch(error){
         res.status(500).json({
             error: 'Utent not valid'
         })
-        console.log('Errore nella creazione del nuovo utente')
+        console.log('Errore nella creazione del nuovo utente',error)
     }
 }
 
-export default {getAllUtents, getUtentId}
+export default {getAllUtents, getUtentId, addNewUtent}
