@@ -54,7 +54,7 @@ const addNewUtent = async (req, res) =>{
         const {name,surname,email} = req.body
         if(!name || !surname || !email){
             res.status(400).json({
-                messagge: 'Inserire dati in modo corretto'
+                message: 'Inserire dati in modo corretto'
             })
             return;
         }else{
