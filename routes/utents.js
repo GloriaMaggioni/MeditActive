@@ -23,4 +23,9 @@ router.post('/', utentsControllers.addNewUtent);
 // delete an utent
 router.delete('/:id', utentsControllers.deleteUtent);
 
+
+//update an utent
+router.put('/:id', utentsControllers.utentUpdate);
+router.patch('/:id', utentsControllers.updateUtentPatch)
+
 export default router

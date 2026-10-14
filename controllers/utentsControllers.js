@@ -104,4 +104,42 @@ const deleteUtent = async (req, res) =>{
     }
 };
 
-export default {getAllUtents, getUtentId, addNewUtent, deleteUtent}
+
+
+// method for update the utent
+  // PUT
+const utentUpdate = async(req, res) =>{
+    try{
+        if(!name || !surname || !email){
+            res.status(400).json({
+                messsage: 'Dati mancanti'
+            })
+            return;
+        }
+        const id = req.params.id;
+        const {name,surname,email} = req.body;
+        const [result] = await pool.execute('UPDATE utents SET name = ?, surname =?, email=? WHERE id =? ', [name,surname,email, id]);
+
+       
+          res.status(200).json({
+              message: 'Utent updated',
+              id : id
+          })
+
+       
+
+      
+
+    }catch(error){
+
+    }
+
+}
+
+  // PATCH
+const updateUtentPatch = (req, res) =>{}
+
+
+
+
+export default {getAllUtents, getUtentId, addNewUtent, deleteUtent, utentUpdate, updateUtentPatch}
