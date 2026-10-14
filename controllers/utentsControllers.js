@@ -85,7 +85,7 @@ const deleteUtent = async (req, res) =>{
 
         if(result.affectedRows === 0){
             res.status(404).json({
-                message : 'Utent already deleted'
+                message : 'Utent not found'
             })
         }else{
                res.status(200).json({
@@ -93,10 +93,8 @@ const deleteUtent = async (req, res) =>{
                id: utentId
             })
         }
-        
 
     }catch(error){
-        console.log(error),
         res.status(500).json({
              error : 'Errore durante la cancellazione'
 
@@ -112,7 +110,7 @@ const utentUpdate = async(req, res) =>{
     try{
         if(!name || !surname || !email){
             res.status(400).json({
-                messsage: 'Dati mancanti'
+                error: 'Incompleted datas'
             })
             return;
         }
@@ -120,17 +118,22 @@ const utentUpdate = async(req, res) =>{
         const {name,surname,email} = req.body;
         const [result] = await pool.execute('UPDATE utents SET name = ?, surname =?, email=? WHERE id =? ', [name,surname,email, id]);
 
-       
-          res.status(200).json({
+         if(result.affectedRows === 0){
+             res.status(404).json({
+                error: 'Upload did not take place'
+             })
+         }else{
+             res.status(200).json({
               message: 'Utent updated',
               id : id
           })
 
-       
-
-      
+         }
 
     }catch(error){
+        res.status(500).json({
+            error: 'Upload not allowed with success!'
+        })
 
     }
 
