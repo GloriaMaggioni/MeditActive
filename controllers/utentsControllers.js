@@ -42,7 +42,7 @@ const getUtentId = async  (req,res) =>{
         res.status(500).json({
             error: 'Errore nella query per id ',
         })
-        console.log('Errore nek cercare id',error)
+        console.log('Errore nel cercare id',error)
     }
 };
 
@@ -73,6 +73,35 @@ const addNewUtent = async (req, res) =>{
         })
         console.log('Errore nella creazione del nuovo utente',error)
     }
-}
+};
 
-export default {getAllUtents, getUtentId, addNewUtent}
+
+// delete an utent method
+
+const deleteUtent = async (req, res) =>{
+    try{
+         const utentId = req.params.id;
+         const [result] = await pool.execute('DELETE FROM utents WHERE id=?', [utentId])
+
+        if(result.affectedRows === 0){
+            res.status(404).json({
+                message : 'Utent already deleted'
+            })
+        }else{
+               res.status(200).json({
+                message: 'Utente eliminato',
+               id: utentId
+            })
+        }
+        
+
+    }catch(error){
+        console.log(error),
+        res.status(500).json({
+             error : 'Errore durante la cancellazione'
+
+        })
+    }
+};
+
+export default {getAllUtents, getUtentId, addNewUtent, deleteUtent}
