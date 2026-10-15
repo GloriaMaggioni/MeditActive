@@ -108,14 +108,15 @@ const deleteUtent = async (req, res) =>{
   // PUT
 const utentUpdate = async(req, res) =>{
     try{
+         const id = req.params.id;
+        const {name,surname,email} = req.body;
         if(!name || !surname || !email){
             res.status(400).json({
                 error: 'Incompleted datas'
             })
             return;
         }
-        const id = req.params.id;
-        const {name,surname,email} = req.body;
+       
         const [result] = await pool.execute('UPDATE utents SET name = ?, surname =?, email=? WHERE id =? ', [name,surname,email, id]);
 
          if(result.affectedRows === 0){
@@ -131,6 +132,7 @@ const utentUpdate = async(req, res) =>{
          }
 
     }catch(error){
+        console.log(error)
         res.status(500).json({
             error: 'Upload not allowed with success!'
         })
@@ -140,7 +142,62 @@ const utentUpdate = async(req, res) =>{
 }
 
   // PATCH
-const updateUtentPatch = (req, res) =>{}
+const updateUtentPatch = async (req, res) =>{
+    try {
+        const id = req.params.id;
+        const {name,surname,email} = req.body;
+         const fields = [];
+         const values = [];
+           
+         //controllo dei campi
+         if(name){
+            fields.push('name = ?');
+            values.push(name)
+         }
+          if(surname){
+            fields.push('surname=?');
+            values.push(surname)
+         }
+         if(email){
+            fields.push('email=?');
+            values.push(email)
+         };
+
+         //controllo se ci sono i campi
+         if(fields.length === 0){
+            res.status(400).json({
+                error: 'Dati mancanti o errati. Campi ammessi: name,surname,email'
+            })
+            return;
+         }
+
+         values.push(id)
+
+         //query
+         const [result] = await pool.execute(`UPDATE utents SET ${fields.join(',')} WHERE id =?`, values);
+         console.log(result);
+
+         if(result.affectedRows === 0){
+            res.status(404).json({
+                error: 'Utent not found'
+            })
+
+         }else{
+             res.status(200).json({
+             message: 'Update avvenuto con successo!!',
+             id: id,
+         })
+
+         }
+
+    }catch(error){
+        console.log(error);
+        res.status(500).json({
+            error: "Errore durante l'update"
+        })
+
+    }
+}
 
 
 
