@@ -1,18 +1,22 @@
 // logica relativa ai dati dei goals
-import connection, { query } from '../config/db';
+
+import pool from "../config/db.js";
 
 
-query(' SELECT * FROM goals', (err, result) =>{
-    if(err){
-        res.status(500).json({message: 'Errore nella query per i dati sui goals', err})
-        return;
-    }else {
-        res.status(200).json({
-            message: 'Connessione avvenuta con successo'
-            
-        })
+// method to get all goals
+const getAllGoals = async (req,res) =>{
+    try{
+        const [rows] = await pool.execute('SELECT * FROM goals')
+        res.json(rows);
+        console.log(rows)
+
+    }catch(error){
+        res.status(500).json({
+            err: 'Errore nella query per i goals',
+        });
+        console.log('Errore nella query in goalsControllers', error)
+
     }
-});
+};
 
-
-export default connection;
+export default getAllGoals;

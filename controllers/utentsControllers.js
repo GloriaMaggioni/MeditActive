@@ -1,7 +1,7 @@
 // logica relativa ai dati utenti
 
 import pool from '../config/db.js'
-//obj : prendere i dati degli utento
+
 
 
 // method to get all utents

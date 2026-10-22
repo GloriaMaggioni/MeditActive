@@ -1,12 +1,11 @@
 import express from 'express';
-// import db from './config/db.js';
 import router from './routes/utents.js'
 
 var app = express();
 
 app.use(express.json());
 app.use('/utents', router);
-
+app.use('/goals', router)
 
 const port = 3000;
 
