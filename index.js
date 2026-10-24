@@ -1,11 +1,12 @@
 import express from 'express';
 import router from './routes/utents.js'
+import rotta from './routes/goals.js';
 
 var app = express();
 
 app.use(express.json());
 app.use('/utents', router);
-app.use('/goals', router)
+app.use('/goals', rotta)
 
 const port = 3000;
 

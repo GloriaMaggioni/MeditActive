@@ -1,10 +1,12 @@
 // routes per prendere i dati relativi agli obiettivi
 import { Router } from 'express'
- import goalsController from '../controllers/goalsController.js'
+ import goalsControllers from '../controllers/goalsControllers.js'
 
- const router = Router();
+ const rotta = Router();
 
 
- router.get('/', goalsController.getAllGoals())
+ rotta.get('/', goalsControllers.getAllGoals)
 
-export default router
+  rotta.get('/:id', goalsControllers.getGoalsById)
+
+export default rotta
