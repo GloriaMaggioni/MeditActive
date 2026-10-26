@@ -9,6 +9,9 @@ const road = Router()
 // get all intervalli
 road.get('/', intervalliControllers.getAllIntervalli);
 
+//get by intervalli's id
+road.get('/:id', intervalliControllers.getIntervalliById)
+
 //create new intervalli
 road.post('/', intervalliControllers.createNewIntervalli)
  
