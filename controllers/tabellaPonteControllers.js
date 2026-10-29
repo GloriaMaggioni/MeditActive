@@ -45,8 +45,45 @@ const addNewDatas = async (req, res) =>{
             err: ' Error into process of add new datas'
         })
     }
+};
+
+
+//PATCH
+
+const updateDatas = async (req, res) =>{
+    try{
+      
+        const {intervallo_id, goal_id} = req.params;
+        const {status} = req.body;
+
+        const validateStatus = ['active', 'finished', 'deleted', 'suspended'];
+        if(!validateStatus.includes(status)){
+           res.status(400).json({
+             error: 'Status not valid' 
+           });
+           return;
+        }
+
+        const [result] = await pool.execute(`UPDATE tabellaPonte SET status = ? WHERE intervallo_id = ? AND goal_id = ?`, [status, intervallo_id, goal_id]);
+
+        if(result.affectedRows === 0){
+            res.status(404).json({
+                error: 'Data not found'
+            })
+        }else{
+            res.status(200).json({
+                message: 'Datas successfully updated'
+            })
+        }
+
+    }catch(err){
+        res.status(500).json({
+            err: 'Error during the update'
+        })
+
+    }
 }
 
 
 
-export default {getAllDatas, addNewDatas}
+export default {getAllDatas, addNewDatas, updateDatas}
