@@ -72,13 +72,13 @@ const updateDatas = async (req, res) =>{
             })
         }else{
             res.status(200).json({
-                message: 'Datas successfully updated'
+                message:  'Update complete successfully'
             })
         }
 
     }catch(err){
         res.status(500).json({
-            err: 'Error during the update'
+            err: 'Error during the update of datas of tabellaPonte '
         })
 
     }

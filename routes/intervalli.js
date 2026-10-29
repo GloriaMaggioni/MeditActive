@@ -7,19 +7,19 @@ const road = Router()
 
 
 // get all intervalli
-road.get('/', intervalliControllers.getAllIntervalli);
+road.get('/', intervalliControllers.getAllIntervalli);    // GET all
 
 //get by intervalli's id
-road.get('/:id', intervalliControllers.getIntervalliById)
+road.get('/:id', intervalliControllers.getIntervalliById)  // GET id
 
 //create new intervalli
-road.post('/', intervalliControllers.createNewIntervalli)
+road.post('/', intervalliControllers.createNewIntervalli)  // POST
  
 
 // update specific intervall
-road.patch('/:id', intervalliControllers.updateIntervalli)
+road.patch('/:id', intervalliControllers.updateIntervalli)  //PATCH
 
 //delete a specific intevall
-road.delete('/:id', intervalliControllers.deleteIntervalli)
+road.delete('/:id', intervalliControllers.deleteIntervalli)  //DELETE
 
 export default road

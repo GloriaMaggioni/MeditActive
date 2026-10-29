@@ -72,7 +72,41 @@ import pool from "../config/db.js"
  }  ;
 
   //PATCH
- const updateIntervalli = async (req,res) =>{ } ;
+ const updateIntervalli = async (req,res) =>{
+    try{
+        const {data_inizio, data_fine} = req.body;
+        const {id} = req.params;
+
+        if(!data_inizio || !data_fine){
+             res.status(400).json({
+                error: "Datas not correct: insert data of beginning and data of ending"
+            })
+            
+        }else if( data_fine < data_inizio ){
+            res.status(400).json({
+                error: 'Insert valid datas: date not valid.The end date must be later than the end date'
+            })
+            
+        }else{
+            const [result] = await pool.execute('UPDATE intervalli SET data_inizio =?, data_fine =? WHERE id= ?', [data_inizio,data_fine, id]);
+
+           if(result.affectedRows === 0){
+                res.status(404).json({
+                    error: 'Data not found'
+                })
+            }else{
+                res.status(200).json({
+                   message:  'Update complete successfully'
+                })
+            }
+        }
+    }catch(err){
+        console.error('Error dal catch di patch degli intervalli', err);
+         res.status(500).json({
+            err: 'Error during the update intervalli datas'
+        })
+    }
+  } ;
 
  // DELETE
  const deleteIntervalli = async (req,res) =>{
