@@ -3,7 +3,7 @@
 import pool from "../config/db.js"
 
 
-// method to take all of intervalli
+// method to take all of intervalli    // GET --> da aggiungere poi i filtri
  const getAllIntervalli = async (req,res) =>{
     try{
         const [rows] = await pool.execute('SELECT * FROM intervalli');
@@ -15,8 +15,10 @@ import pool from "../config/db.js"
             err: 'Error during the query to take the list of intervalli',
         })
     }
- }   // GET --> da aggiungere poi i filtri
+ } ; 
 
+
+ //GET ID
  const getIntervalliById = async (req,res) =>{
     try{
         const intervalloId = req.params.id;
@@ -39,10 +41,10 @@ import pool from "../config/db.js"
         })
 
     }
- }   //GET ID
+ };   
 
 
- // method to creare a new intervallo
+ // method to creare a new intervallo     // POST
  const createNewIntervalli = async (req,res) =>{
     try{
         const {data_inizio, data_fine,utent_id} = req.body;
@@ -67,10 +69,12 @@ import pool from "../config/db.js"
             err: 'Error into the POST query for create a new interval'
         })
     }
- }   // POST
+ }  ;
 
- const updateIntervalli = async (req,res) =>{ }  //PATCH
+  //PATCH
+ const updateIntervalli = async (req,res) =>{ } ;
 
+ // DELETE
  const deleteIntervalli = async (req,res) =>{
     try{
         const intervalloId = req.params.id;
@@ -78,7 +82,7 @@ import pool from "../config/db.js"
         
         if(result.affectedRows === 0){
             res.status(404).json({
-                err : 'Error during the elimination of the interval'
+                err : 'Id interval not found'
             })
           
         }else {  
@@ -87,11 +91,19 @@ import pool from "../config/db.js"
             })
         }
     } catch(err){
-        res.status(500).json({
+        console.error('Catch del delete degli intervalli', err);
+        if (err.code === 'ER_ROW_IS_REFERENCED_2'){
+            res.status(409).json({
+                err: 'Cannot delete this interval: it has linked goals'
+            })
+        }else {
+             res.status(500).json({
             err: 'Error during the elimination of the interval selected'
         })
+        }
+       
     }
- } // DELETE
+ } ;
 
 
 
