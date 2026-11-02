@@ -3,12 +3,38 @@
 import pool from "../config/db.js"
 
 
-// method to take all of intervalli    // GET --> da aggiungere poi i filtri
+// method to take all of intervalli    // GET 
  const getAllIntervalli = async (req,res) =>{
     try{
-        const [rows] = await pool.execute('SELECT * FROM intervalli');
-        res.status(200).json(rows);
-        console.log('risultato delle get att senza filtri', rows)
+        const {goal_id, data_inizio, data_fine} = req.query;
+        const conditions = [];
+        const values= [];
+
+             if(goal_id ){
+                conditions.push('tabellaPonte.goal_id =?');
+                values.push(goal_id)
+             }
+             if(data_inizio){
+                conditions.push('intervalli.data_inizio >=?');
+                values.push(data_inizio)
+             }
+             if(data_fine ){
+                conditions.push('intervalli.data_fine <=?');
+                values.push(data_fine)
+             };
+
+             let query = `
+             SELECT intervalli.id, tabellaPonte.goal_id, intervalli.data_inizio, intervalli.data_fine,  intervalli.utent_id
+             FROM intervalli
+             JOIN tabellaPonte ON intervalli.id = tabellaPonte.intervallo_id `;
+
+             if(conditions.length > 0){
+                query += ` WHERE ${conditions.join(' AND ')}`
+              }
+
+         const [result] = await pool.execute(query, values);
+         res.status(200).json(result);
+         console.log(result)
 
     }catch(err){
         res.status(500).json({
