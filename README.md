@@ -1,4 +1,4 @@
-# MeditActive — REST API
+# MeditActive 
 
 **MeditActive** is the backend of a wellness app that offers users a catalog of **predefined goals** to improve their lifestyle.
  
