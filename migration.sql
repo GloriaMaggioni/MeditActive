@@ -2,7 +2,7 @@
 CREATE DATABASE meditActiveDB;
 
 -- selcted the db we need to use --
-USE meditActiveDB
+USE meditActiveDB;
 
 
 -- ccreate utents's table where we save the utents's datas --
@@ -19,7 +19,7 @@ CREATE TABLE goals (
 id INT AUTO_INCREMENT,
 name VARCHAR(100),
 PRIMARY KEY (id)
-)
+);
 
 
 
@@ -38,7 +38,8 @@ CREATE TABLE intervalli (
 CREATE TABLE tabellaPonte (
 intervallo_id INT,
 goal_id INT,
+status ENUM ('active', 'finished', 'deleted', 'suspended') NOT NULL DEFAULT 'active',
 PRIMARY KEY (intervallo_id, goal_id),
 FOREIGN KEY (intervallo_id) REFERENCES intervalli(id),
 FOREIGN KEY (goal_id) REFERENCES goals(id)
-)
+);
