@@ -1,3 +1,5 @@
+# MeditActive — REST API
+
 **MeditActive** is the backend of a wellness app that offers users a catalog of **predefined goals** to improve their lifestyle.
  
 This repository contains a **REST API** built with **Node.js + Express** and a **MySQL** database. It lets you:
