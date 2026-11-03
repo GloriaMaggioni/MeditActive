@@ -63,8 +63,9 @@ The `status` column of `tabellaPonte` is defined as:
 status ENUM('active','finished','deleted','suspended') NOT NULL DEFAULT 'active'
 ```
  
-![Database schema](<img width="1785" height="2451" alt="database-schema-en" src="https://github.com/user-attachments/assets/27f749db-b7de-4ade-b2e0-28411fa99307" />
-)
+Database schema:
+<img width="1785" height="2451" alt="database-schema-en" src="https://github.com/user-attachments/assets/27f749db-b7de-4ade-b2e0-28411fa99307" />
+
  
 ### Installation and setup
  
