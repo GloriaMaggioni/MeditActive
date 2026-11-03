@@ -10,6 +10,7 @@ import utentsControllers from '../controllers/utentsControllers.js';
 
 // router.get(percorso,funzione)
 router.get('/', utentsControllers.getAllUtents);
+
 //getAllUtents metodo da creare in utentsController per prendere i dati degli utenti
 router.get('/:id', utentsControllers.getUtentId)
 

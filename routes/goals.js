@@ -5,8 +5,8 @@ import { Router } from 'express'
  const rotta = Router();
 
 
- rotta.get('/', goalsControllers.getAllGoals)
+ rotta.get('/', goalsControllers.getAllGoals);
 
-  rotta.get('/:id', goalsControllers.getGoalsById)
+  rotta.get('/:id', goalsControllers.getGoalsById);
 
 export default rotta

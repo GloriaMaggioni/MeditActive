@@ -34,7 +34,6 @@ import pool from "../config/db.js"
 
          const [result] = await pool.execute(query, values);
          res.status(200).json(result);
-         console.log(result)
 
     }catch(err){
         res.status(500).json({
@@ -58,9 +57,6 @@ import pool from "../config/db.js"
         }
 
         res.status(200).json(rows[0]);
-         console.log('Id dell intervallo scelto', rows[0])
-
-
     }catch(err){
         res.status(500).json({
             err: 'Errore during the query for the intervals id'

@@ -14,7 +14,6 @@ const getAllGoals = async (req,res) =>{
         res.status(500).json({
             err: 'Errore into query for the  goals',
         });
-        console.log('Errore nella query in goalsControllers', err)
 
     }
 } ;
@@ -32,13 +31,11 @@ const getAllGoals = async (req,res) =>{
         }
 
         res.status(200).json(rows[0]);
-        console.log('Id del goals cercato:', rows[0])
 
     }catch(err){
         res.status(500).json({
             err: 'Error into query for the goals id'
         })
-        console.log('Errore nelle query per id dei goals:', err)
     }
 
  }
