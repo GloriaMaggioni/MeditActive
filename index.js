@@ -1,12 +1,16 @@
 import express from 'express';
-// import db from './config/db.js';
 import router from './routes/utents.js'
+import rotta from './routes/goals.js';
+import road from './routes/intervalli.js';
+import rotte from './routes/tabellaPonte.js'
 
 var app = express();
 
 app.use(express.json());
 app.use('/utents', router);
-
+app.use('/goals', rotta);
+app.use('/intervalli', road)
+app.use('/tabellaPonte', rotte)
 
 const port = 3000;
 
