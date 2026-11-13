@@ -15,14 +15,13 @@
   "author": "",
   "license": "ISC",
   "type": "module",
-  
   "bugs": {
     "url": "https://github.com/GloriaMaggioni/MeditActive/issues"
   },
   "homepage": "https://github.com/GloriaMaggioni/MeditActive#readme",
   "dependencies": {
     "dotenv": "^18.0.2",
-    "express": "^5.2.1",
+    "express": "^5.3.0",
     "mysql2": "^3.24.4"
   },
   "devDependencies": {
