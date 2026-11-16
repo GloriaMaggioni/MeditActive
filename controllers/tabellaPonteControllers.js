@@ -7,15 +7,10 @@ const getAllDatas = async (req,res) =>{
     try{
         /* query per unire table itervalli e table goals in tabellaPonte*/
         const [rows] = await pool.execute(`
-        //    SELECT goals.name, intervalli.data_inizio, intervalli.data_fine, tabellaPonte.intervallo_id, tabellaPonte.goal_id, tabellaPonte.status
-        //    FROM tabellaPonte
-        //    JOIN intervalli ON tabellaPonte.intervallo_id = intervalli.id
-        //    JOIN goals ON tabellaPonte.goal_id = goals.id;
-
-          SELECT goals.name, intervalli.data_inizio, intervalli.data_fine, tabellaPonte.intervallo_id, tabellaPonte.goal_id, tabellaPonte.status
-          FROM intervalli
-          LEFT JOIN tabellaPonte ON tabellaPonte.intervallo_id = intervalli.id
-          LEFT JOIN goals ON tabellaPonte.goal_id = goals.id
+        SELECT goals.name, intervalli.data_inizio, intervalli.data_fine, tabellaPonte.intervallo_id, tabellaPonte.goal_id, tabellaPonte.status
+          FROM tabellaPonte
+            JOIN intervalli ON tabellaPonte.intervallo_id = intervalli.id
+            JOIN goals ON tabellaPonte.goal_id = goals.id;
 
          `);
          res.status(200).json(rows);
@@ -93,3 +88,10 @@ const updateDatas = async (req, res) =>{
 
 
 export default {getAllDatas, addNewDatas, updateDatas}
+
+
+
+
+
+
+   

@@ -24,15 +24,45 @@ import pool from "../config/db.js"
              };
 
              let query = `
-             SELECT intervalli.id, tabellaPonte.goal_id, intervalli.data_inizio, intervalli.data_fine,  intervalli.utent_id
-             FROM intervalli
-             JOIN tabellaPonte ON intervalli.id = tabellaPonte.intervallo_id `;
+               SELECT intervalli.id, tabellaPonte.goal_id, intervalli.data_inizio, intervalli.data_fine,  intervalli.utent_id
+               FROM intervalli
+               LEFT JOIN tabellaPonte ON intervalli.id = tabellaPonte.intervallo_id 
+             `;
 
              if(conditions.length > 0){
                 query += ` WHERE ${conditions.join(' AND ')}`
               }
 
-         const [result] = await pool.execute(query, values);
+         const [rows] = await pool.execute(query, values);
+          console.log(rows)
+
+         const result = [];
+
+         rows.forEach(item =>{
+           let trovato =  result.find( intervallo =>{ 
+                return intervallo.id === item.id    
+           });
+
+
+             // per intervalli
+            if(trovato === undefined){
+                    trovato = {
+                        id: item.id,
+                        dataInizio: item.data_inizio,
+                        dataFine: item.data_fine,
+                        utenteId : item.utent_id,
+                        goals: [],
+                    }
+                    result.push(trovato)
+             };
+            
+             //x goals
+            if(item.goal_id !== null){
+                    trovato.goals.push(item.goal_id)
+             }
+         })
+       
+
          res.status(200).json(result);
 
     }catch(err){
@@ -164,3 +194,8 @@ import pool from "../config/db.js"
 
 
 export default  {getAllIntervalli,createNewIntervalli, getIntervalliById, updateIntervalli, deleteIntervalli};
+
+
+
+
+
