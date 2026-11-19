@@ -20,7 +20,7 @@ const getAllGoals = async (req,res, next) =>{
 
         if(rows.length === 0){
             res.status(404).json({
-                error: 'Goals not found'
+                err: 'Goals not found'
             });
             return;
         }

@@ -57,7 +57,7 @@ import pool from "../config/db.js"
             
              //x goals
             if(item.goal_id !== null){
-                    trovato.goals.push(item.goal_id)
+                trovato.goals.push(item.goal_id)
              }
          })
          res.status(200).json(result);
@@ -95,11 +95,10 @@ import pool from "../config/db.js"
 
         if(!data_inizio || !data_fine || !utent_id){
             res.status(400).json({
-                error: "Insert correct datas"
+                err: "Insert correct datas"
             })
         }else{
             const [newIntervallo] = await pool.execute('INSERT INTO intervalli (data_inizio,data_fine, utent_id) VALUES (?,?,?) ', [data_inizio, data_fine, utent_id]);
-            console.log('Nuovo Intervallo', newIntervallo);
             res.status(201).json({
                 id: newIntervallo.insertId,
                 data_inizio: data_inizio,
@@ -121,12 +120,12 @@ import pool from "../config/db.js"
 
         if(!data_inizio || !data_fine){
              res.status(400).json({
-                error: "Datas not correct: insert data of beginning and data of ending"
+                err: "Datas not correct: insert data of beginning and data of ending"
             })
             
         }else if( data_fine < data_inizio ){
             res.status(400).json({
-                error: 'Insert valid datas: date not valid.The end date must be later than the end date'
+                err: 'Insert valid datas: date not valid.The end date must be later than the end date'
             })
             
         }else{
@@ -134,7 +133,7 @@ import pool from "../config/db.js"
 
            if(result.affectedRows === 0){
                 res.status(404).json({
-                    error: 'Data not found'
+                    err: 'Data not found'
                 })
             }else{
                 res.status(200).json({

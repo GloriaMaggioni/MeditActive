@@ -28,7 +28,7 @@ const addNewDatas = async (req, res, next) =>{
         const {intervallo_id, goal_id} = req.body;
         if (!intervallo_id || !goal_id){
             res.status(400).json({
-                error: "Insert correct datas"
+                err: "Insert correct datas"
             })
         }else{
             const [newDatas] = await pool.execute(`
@@ -55,7 +55,7 @@ const updateDatas = async (req, res, next) =>{
         const validateStatus = ['active', 'finished', 'deleted', 'suspended'];
         if(!validateStatus.includes(status)){
            res.status(400).json({
-             error: 'Status not valid' 
+             err: 'Status not valid' 
            });
            return;
         }
@@ -64,7 +64,7 @@ const updateDatas = async (req, res, next) =>{
 
         if(result.affectedRows === 0){
             res.status(404).json({
-                error: 'Data not found'
+                err: 'Data not found'
             })
         }else{
             res.status(200).json({
