@@ -9,14 +9,14 @@ USE meditActiveDB;
 CREATE TABLE utents(
   PRIMARY KEY (id),
   id INT AUTO_INCREMENT,    
-  name VARCHAR(50),    -- max 50 caracters --
-  surname VARCHAR(50), -- max 50 caracters --
-  email VARCHAR(100)  -- max 100 caracters --
+  name VARCHAR(50) NOT NULL,    -- max 50 caracters --
+  surname VARCHAR(50) NOT NULL, -- max 50 caracters --
+  email VARCHAR(100) NOT NULL UNIQUE  -- max 100 caracters --
 );
 
 -- created goal's (obiettivi) table where we save the goal's datas -- 
 CREATE TABLE goals (
-id INT AUTO_INCREMENT,
+id INT AUTO_INCREMENT NOT NULL,
 name VARCHAR(100),
 PRIMARY KEY (id)
 );
@@ -26,10 +26,10 @@ PRIMARY KEY (id)
 -- create the intervalli's table where we save the datas aboout the intervals of every goals --
 CREATE TABLE intervalli (
  id INT AUTO_INCREMENT,
- data_inizio DATE,
- data_fine DATE,
- utent_id INT,
- FOREIGN KEY (utent_id) REFERENCES utents(id),      -- reference of  id's utents table --
+ data_inizio DATE NOT NULL,
+ data_fine DATE NOT NULL,
+ utent_id INT NOT NULL,
+ FOREIGN KEY (utent_id) REFERENCES utents(id) NOT NULL,      -- reference of  id's utents table --
  PRIMARY KEY (id)
 ) ;
 

@@ -4,7 +4,7 @@ import pool from "../config/db.js"
 
 
 // method to take all of intervalli    // GET 
- const getAllIntervalli = async (req,res) =>{
+ const getAllIntervalli = async (req,res, next) =>{
     try{
         const {goal_id, data_inizio, data_fine} = req.query;
         const conditions = [];
@@ -34,7 +34,7 @@ import pool from "../config/db.js"
               }
 
          const [rows] = await pool.execute(query, values);
-          console.log(rows)
+         
 
          const result = [];
 
@@ -42,7 +42,6 @@ import pool from "../config/db.js"
            let trovato =  result.find( intervallo =>{ 
                 return intervallo.id === item.id    
            });
-
 
              // per intervalli
             if(trovato === undefined){
@@ -61,37 +60,30 @@ import pool from "../config/db.js"
                     trovato.goals.push(item.goal_id)
              }
          })
-       
-
          res.status(200).json(result);
 
     }catch(err){
-        res.status(500).json({
-            err: 'Error during the query to take the list of intervalli',
-        })
+       next(err)
     }
  } ; 
 
 
  //GET ID
- const getIntervalliById = async (req,res) =>{
+ const getIntervalliById = async (req,res, next) =>{
     try{
         const intervalloId = req.params.id;
         const [rows] = await pool.execute('SELECT * FROM intervalli WHERE id = ?', [intervalloId]);
 
         if(rows.length === 0){
             res.status(404).json({
-                err: 'Inteval not found'
+                err: 'Interval not found'
             })
             return;
         }
 
         res.status(200).json(rows[0]);
     }catch(err){
-        res.status(500).json({
-            err: 'Errore during the query for the intervals id'
-        })
-
+       next(err);
     }
  };   
 
@@ -117,14 +109,12 @@ import pool from "../config/db.js"
         }
 
     }catch(err){
-        res.status(500).json({
-            err: 'Error into the POST query for create a new interval'
-        })
+       next(err);
     }
- }  ;
+ };
 
   //PATCH
- const updateIntervalli = async (req,res) =>{
+ const updateIntervalli = async (req,res, next) =>{
     try{
         const {data_inizio, data_fine} = req.body;
         const {id} = req.params;
@@ -153,15 +143,12 @@ import pool from "../config/db.js"
             }
         }
     }catch(err){
-        console.error('Error dal catch di patch degli intervalli', err);
-         res.status(500).json({
-            err: 'Error during the update intervalli datas'
-        })
+        next(err)
     }
   } ;
 
  // DELETE
- const deleteIntervalli = async (req,res) =>{
+ const deleteIntervalli = async (req,res, next) =>{
     try{
         const intervalloId = req.params.id;
         const [result] = await pool.execute('DELETE  FROM intervalli WHERE id =?', [intervalloId]);
@@ -177,7 +164,6 @@ import pool from "../config/db.js"
             })
         }
     } catch(err){
-        console.error('Catch del delete degli intervalli', err);
         if (err.code === 'ER_ROW_IS_REFERENCED_2'){
             res.status(409).json({
                 err: 'Cannot delete this interval: it has linked goals'

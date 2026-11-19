@@ -5,30 +5,25 @@ import pool from '../config/db.js'
 
 
 // method to get all utents
- const  getAllUtents = async (req, res) =>{
+ const  getAllUtents = async (req, res, next) =>{
     try{
         const [rows] = await pool.execute('SELECT * FROM utents')
         res.json(rows);
         console.log(rows)
         
     }catch(err){
-        res.status(500).json({
-            err: 'Errore nella query',    
-        });
-        console.log('Errore nella query in utentsControllers', err)
-        
+       next(err) ;
     }
     
 };
 
 // method to get the specifi utents's ID
-const getUtentId = async  (req,res) =>{
+const getUtentId = async  (req,res,next) =>{
     try{
         const utentId = req.params.id;
         const [rows] = await pool.execute( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
 
         if (rows.length === 0){
-            // persona non esiste,cosa fare
             res.status(404).json({
                 error: 'Utent not found'
             })
@@ -37,16 +32,14 @@ const getUtentId = async  (req,res) =>{
              res.json(rows[0])
         
         
-    }catch(error){
-        res.status(500).json({
-            error: 'Errore nella query per id ',
-        })
+    }catch(err){
+       next(err)
     }
 };
 
 
 // method to create new utent on the db
-const addNewUtent = async (req, res) =>{
+const addNewUtent = async (req, res, next) =>{
     
     try{
         const {name,surname,email} = req.body
@@ -65,17 +58,15 @@ const addNewUtent = async (req, res) =>{
            email:email
         })
         }
-    }catch(error){
-        res.status(500).json({
-            error: 'Utent not valid'
-        })
+    }catch(err){
+       next(err)
     }
 };
 
 
 // delete an utent method
 
-const deleteUtent = async (req, res) =>{
+const deleteUtent = async (req, res,next) =>{
     try{
          const utentId = req.params.id;
          const [result] = await pool.execute('DELETE FROM utents WHERE id=?', [utentId])
@@ -91,11 +82,8 @@ const deleteUtent = async (req, res) =>{
             })
         }
 
-    }catch(error){
-        res.status(500).json({
-             error : 'Errore durante la cancellazione'
-
-        })
+    }catch(err){
+      next(err);
     }
 };
 
@@ -103,7 +91,7 @@ const deleteUtent = async (req, res) =>{
 
 // method for update the utent
   // PUT
-const utentUpdate = async(req, res) =>{
+const utentUpdate = async(req, res,next) =>{
     try{
          const id = req.params.id;
         const {name,surname,email} = req.body;
@@ -128,18 +116,13 @@ const utentUpdate = async(req, res) =>{
 
          }
 
-    }catch(error){
-        console.log(error)
-        res.status(500).json({
-            error: 'Upload not allowed with success!'
-        })
-
-    }
-
-}
+    }catch(err){
+       next(err);
+    };
+};
 
   // PATCH
-const updateUtentPatch = async (req, res) =>{
+const updateUtentPatch = async (req, res, next) =>{
     try {
         const id = req.params.id;
         const {name,surname,email} = req.body;
@@ -187,12 +170,8 @@ const updateUtentPatch = async (req, res) =>{
 
          }
 
-    }catch(error){
-        console.log(error);
-        res.status(500).json({
-            error: "Errore durante l'update"
-        })
-
+    }catch(err){
+        next(err)
     }
 }
 

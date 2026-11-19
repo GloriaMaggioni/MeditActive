@@ -2,7 +2,7 @@ import pool from "../config/db.js";
 
 
 // GET
-const getAllDatas = async (req,res) =>{
+const getAllDatas = async (req,res, next) =>{
 
     try{
         /* query per unire table itervalli e table goals in tabellaPonte*/
@@ -14,19 +14,16 @@ const getAllDatas = async (req,res) =>{
 
          `);
          res.status(200).json(rows);
-        
 
-    }catch(error){
-        res.status(500).json({
-            error: 'Error '
-        })
+    }catch(err){
+       next(err)
     }
 };
 
 
 // POST
 
-const addNewDatas = async (req, res) =>{
+const addNewDatas = async (req, res, next) =>{
     try{
         const {intervallo_id, goal_id} = req.body;
         if (!intervallo_id || !goal_id){
@@ -42,16 +39,14 @@ const addNewDatas = async (req, res) =>{
             })
         }
     }catch(err){
-        res.status(500).json({
-            err: ' Error into process of add new datas'
-        })
+        next(err)
     }
 };
 
 
 //PATCH
 
-const updateDatas = async (req, res) =>{
+const updateDatas = async (req, res, next) =>{
     try{
       
         const {intervallo_id, goal_id} = req.params;
@@ -78,12 +73,9 @@ const updateDatas = async (req, res) =>{
         }
 
     }catch(err){
-        res.status(500).json({
-            err: 'Error during the update of datas of tabellaPonte '
-        })
-
+        next(err)
     }
-}
+};
 
 
 

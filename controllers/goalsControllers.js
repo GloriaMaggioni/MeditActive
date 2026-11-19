@@ -4,21 +4,16 @@ import pool from "../config/db.js";
 
 
 // method to get all goals
-const getAllGoals = async (req,res) =>{
+const getAllGoals = async (req,res, next) =>{
     try{
         const [rows] = await pool.execute('SELECT * FROM goals')
         res.status(200).json(rows);
-         console.log(rows)
-
     }catch(err){
-        res.status(500).json({
-            err: 'Errore into query for the  goals',
-        });
-
+       next(err)
     }
 } ;
 
- const getGoalsById = async (req, res) =>{
+ const getGoalsById = async (req, res, next) =>{
     try{
         const goalsId = req.params.id;
         const [rows] = await pool.execute('SELECT * FROM goals WHERE id = ?', [goalsId]);
@@ -33,9 +28,7 @@ const getAllGoals = async (req,res) =>{
         res.status(200).json(rows[0]);
 
     }catch(err){
-        res.status(500).json({
-            err: 'Error into query for the goals id'
-        })
+        next(err)
     }
 
  }
