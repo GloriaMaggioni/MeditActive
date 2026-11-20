@@ -1,36 +1,33 @@
-// logica relativa ai dati utenti
+// logica relativa ai dati users
 
 import pool from '../config/db.js'
 
 
 
-// method to get all utents
- const  getAllUtents = async (req, res, next) =>{
+// method to get all users
+ const  getAllUsers = async (req, res, next) =>{
     try{
-        const [rows] = await pool.execute('SELECT * FROM utents')
-        res.json(rows);
-        console.log(rows)
-        
+        const [rows] = await pool.execute('SELECT * FROM users')
+        res.json(rows);        
     }catch(err){
        next(err) ;
     }
     
 };
 
-// method to get the specifi utents's ID
-const getUtentId = async  (req,res,next) =>{
+// method to get the specifi users's ID
+const getUserId = async  (req,res,next) =>{
     try{
-        const utentId = req.params.id;
-        const [rows] = await pool.execute( 'SELECT * FROM utents WHERE id = ? ', [utentId]);
+        const userId = req.params.id;
+        const [rows] = await pool.execute( 'SELECT * FROM users WHERE id = ? ', [userId]);
 
         if (rows.length === 0){
             res.status(404).json({
-                error: 'Utent not found'
+                error: 'User not found'
             })
             return;
         }
-             res.json(rows[0])
-        
+             res.json(rows[0]);    
         
     }catch(err){
        next(err)
@@ -38,21 +35,21 @@ const getUtentId = async  (req,res,next) =>{
 };
 
 
-// method to create new utent on the db
-const addNewUtent = async (req, res, next) =>{
+// method to create new user on the db  POST
+const addNewUser = async (req, res, next) =>{
     
     try{
-        const {name,surname,email} = req.body
+        const {name,surname,email} = req.body;
+
         if(!name || !surname || !email){
             res.status(400).json({
-                message: 'Inserire dati in modo corretto'
+                message: 'Enter datas correncly. Enter name,surname and email'
             })
             return;
         }else{
-        const [newUtent] = await pool.execute('INSERT INTO utents (name,surname,email) VALUES (?,?,?)', [name,surname,email]);
-        console.log('Nuovo utente:', newUtent)
+        const [newUser] = await pool.execute('INSERT INTO users (name,surname,email) VALUES (?,?,?)', [name,surname,email]);
         res.status(201).json({
-           id : newUtent.insertId,
+           id : newUser.insertId,
            name: name,
            surname: surname,
            email:email
@@ -64,21 +61,21 @@ const addNewUtent = async (req, res, next) =>{
 };
 
 
-// delete an utent method
+// delete an user method
 
-const deleteUtent = async (req, res,next) =>{
+const deleteUser = async (req, res,next) =>{
     try{
-         const utentId = req.params.id;
-         const [result] = await pool.execute('DELETE FROM utents WHERE id=?', [utentId])
+         const userId = req.params.id;
+         const [result] = await pool.execute('DELETE FROM users WHERE id=?', [userId])
 
         if(result.affectedRows === 0){
             res.status(404).json({
-                message : 'Utent not found'
+                message : 'User not found'
             })
         }else{
                res.status(200).json({
-                message: 'Utente eliminato',
-               id: utentId
+                message: 'User eliminated',
+               id: userId
             })
         }
 
@@ -89,12 +86,13 @@ const deleteUtent = async (req, res,next) =>{
 
 
 
-// method for update the utent
+// method for update the user
   // PUT
-const utentUpdate = async(req, res,next) =>{
+const userUpdate = async(req, res,next) =>{
     try{
          const id = req.params.id;
         const {name,surname,email} = req.body;
+
         if(!name || !surname || !email){
             res.status(400).json({
                 error: 'Incompleted datas'
@@ -102,7 +100,7 @@ const utentUpdate = async(req, res,next) =>{
             return;
         }
        
-        const [result] = await pool.execute('UPDATE utents SET name = ?, surname =?, email=? WHERE id =? ', [name,surname,email, id]);
+        const [result] = await pool.execute('UPDATE users SET name = ?, surname =?, email=? WHERE id =? ', [name,surname,email, id]);
 
          if(result.affectedRows === 0){
              res.status(404).json({
@@ -110,7 +108,7 @@ const utentUpdate = async(req, res,next) =>{
              })
          }else{
              res.status(200).json({
-              message: 'Utent updated',
+              message: 'User updated',
               id : id
           })
 
@@ -122,7 +120,7 @@ const utentUpdate = async(req, res,next) =>{
 };
 
   // PATCH
-const updateUtentPatch = async (req, res, next) =>{
+const updateUserPatch = async (req, res, next) =>{
     try {
         const id = req.params.id;
         const {name,surname,email} = req.body;
@@ -154,12 +152,12 @@ const updateUtentPatch = async (req, res, next) =>{
          values.push(id)
 
          //query
-         const [result] = await pool.execute(`UPDATE utents SET ${fields.join(',')} WHERE id =?`, values);
+         const [result] = await pool.execute(`UPDATE users SET ${fields.join(',')} WHERE id =?`, values);
          console.log(result);
 
          if(result.affectedRows === 0){
             res.status(404).json({
-                error: 'Utent not found'
+                error: 'User not found'
             })
 
          }else{
@@ -178,4 +176,4 @@ const updateUtentPatch = async (req, res, next) =>{
 
 
 
-export default {getAllUtents, getUtentId, addNewUtent, deleteUtent, utentUpdate, updateUtentPatch}
+export default {getAllUsers, getUserId, addNewUser, deleteUser, userUpdate, updateUserPatch}

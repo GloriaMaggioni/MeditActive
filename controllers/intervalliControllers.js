@@ -3,6 +3,19 @@
 import pool from "../config/db.js"
 
 
+const checkDate = (data_inizio, data_fine) =>{
+
+   
+    if(!data_inizio || !data_fine){
+        return 'Datas not correct: insert data of beginning and data of ending'
+    }else if(isNaN(new Date(data_inizio)) || isNaN(new Date(data_fine))){
+        return 'Date not valid. Use only numbers and used this date format : YYYY-MM-DD'
+    }else if(data_fine < data_inizio){
+         return 'Insert valid datas: date not valid.The end date must be later than the start date'
+    }
+}
+
+
 // method to take all of intervalli    // GET 
  const getAllIntervalli = async (req,res, next) =>{
     try{
@@ -24,7 +37,7 @@ import pool from "../config/db.js"
              };
 
              let query = `
-               SELECT intervalli.id, tabellaPonte.goal_id, intervalli.data_inizio, intervalli.data_fine,  intervalli.utent_id
+               SELECT intervalli.id, tabellaPonte.goal_id, intervalli.data_inizio, intervalli.data_fine,  intervalli.user_id
                FROM intervalli
                LEFT JOIN tabellaPonte ON intervalli.id = tabellaPonte.intervallo_id 
              `;
@@ -49,7 +62,7 @@ import pool from "../config/db.js"
                         id: item.id,
                         dataInizio: item.data_inizio,
                         dataFine: item.data_fine,
-                        utenteId : item.utent_id,
+                        userId : item.user_id,
                         goals: [],
                     }
                     result.push(trovato)
@@ -89,23 +102,29 @@ import pool from "../config/db.js"
 
 
  // method to creare a new intervallo     // POST
- const createNewIntervalli = async (req,res) =>{
+ const createNewIntervalli = async (req,res, next) =>{
     try{
-        const {data_inizio, data_fine,utent_id} = req.body;
+        const {data_inizio, data_fine,user_id} = req.body;
+        const validateDate = checkDate(data_inizio, data_fine);
 
-        if(!data_inizio || !data_fine || !utent_id){
+        if( !user_id){
             res.status(400).json({
-                err: "Insert correct datas"
+                err: "Missing  user_id"
             })
+        }else if(validateDate){
+            res.status(400).json({
+                err : validateDate
+            })
+
         }else{
-            const [newIntervallo] = await pool.execute('INSERT INTO intervalli (data_inizio,data_fine, utent_id) VALUES (?,?,?) ', [data_inizio, data_fine, utent_id]);
+            const [newIntervallo] = await pool.execute('INSERT INTO intervalli (data_inizio,data_fine, user_id) VALUES (?,?,?) ', [data_inizio, data_fine, user_id]);
             res.status(201).json({
                 id: newIntervallo.insertId,
                 data_inizio: data_inizio,
                 data_fine : data_fine,
-                utent_id: utent_id
-            })
-        }
+                user_id: user_id
+            });
+        };
 
     }catch(err){
        next(err);
@@ -118,29 +137,26 @@ import pool from "../config/db.js"
         const {data_inizio, data_fine} = req.body;
         const {id} = req.params;
 
-        if(!data_inizio || !data_fine){
-             res.status(400).json({
-                err: "Datas not correct: insert data of beginning and data of ending"
-            })
-            
-        }else if( data_fine < data_inizio ){
+        let validaDate = checkDate(data_inizio, data_fine)
+
+        if(validaDate){
             res.status(400).json({
-                err: 'Insert valid datas: date not valid.The end date must be later than the end date'
+                err : validaDate
             })
-            
         }else{
             const [result] = await pool.execute('UPDATE intervalli SET data_inizio =?, data_fine =? WHERE id= ?', [data_inizio,data_fine, id]);
 
-           if(result.affectedRows === 0){
-                res.status(404).json({
-                    err: 'Data not found'
+          if(result.affectedRows === 0){
+                 res.status(404).json({
+                     err: 'Data not found'
                 })
             }else{
                 res.status(200).json({
-                   message:  'Update complete successfully'
+                    message:  'Update completed successfully'
                 })
             }
-        }
+        };
+       
     }catch(err){
         next(err)
     }
@@ -154,7 +170,7 @@ import pool from "../config/db.js"
         
         if(result.affectedRows === 0){
             res.status(404).json({
-                err : 'Id interval not found'
+                err : "Interval id not found"
             })
           
         }else {  
@@ -177,6 +193,8 @@ import pool from "../config/db.js"
  } ;
 
 
+
+  
 
 export default  {getAllIntervalli,createNewIntervalli, getIntervalliById, updateIntervalli, deleteIntervalli};
 

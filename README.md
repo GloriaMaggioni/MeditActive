@@ -31,12 +31,12 @@ MeditActive/
 ├── config/
 │   └── db.js                         # MySQL connection pool (reads variables from .env)
 ├── controllers/                      # Logic: database queries and HTTP responses
-│   ├── utentsControllers.js
+│   ├── usersControllers.js
 │   ├── goalsControllers.js
 │   ├── intervalliControllers.js
 │   └── tabellaPonteControllers.js
 ├── routes/                           # Routes only, wired to the controllers
-│   ├── utents.js
+│   ├── users.js
 │   ├── goals.js
 │   ├── intervalli.js
 │   └── tabellaPonte.js
@@ -54,9 +54,9 @@ Database: `meditActiveDB` — 4 tables.
  
 | Table | Content |
 |---|---|
-| `utents` | Users: `id`, `name`, `surname`, `email` |
+| `users` | Users: `id`, `name`, `surname`, `email` |
 | `goals` | Catalog of predefined goals: `id`, `name` |
-| `intervalli` | Time intervals: `id`, `data_inizio`, `data_fine`, `utent_id` (FK → `utents.id`) |
+| `intervalli` | Time intervals: `id`, `data_inizio`, `data_fine`, `user_id` (FK → `users.id`) |
 | `tabellaPonte` | Junction table (many-to-many relationship between intervals and goals): `intervallo_id` (FK → `intervalli.id`), `goal_id` (FK → `goals.id`), `status`. **Composite primary key** (`intervallo_id`, `goal_id`) |
  
 The `status` column of `tabellaPonte` is defined as:
@@ -113,16 +113,16 @@ Database schema:
 All requests with a body use **JSON** (`Content-Type: application/json`). Dates use the MySQL `DATE` format: `YYYY-MM-DD`.
 On a server or database error, every endpoint responds with **500**.
  
-#### 👤 Users — `/utents`
+#### 👤 Users — `/users`
  
 | Method | Endpoint | Body | Responses |
 |---|---|---|---|
-| `GET` | `/utents` | — | `200` list of all users |
-| `GET` | `/utents/:id` | — | `200` user · `404` user not found |
-| `POST` | `/utents` | `name`, `surname`, `email` (all required) | `201` created user with its `id` · `400` missing data |
-| `PUT` | `/utents/:id` | `name`, `surname`, `email` (all required) | `200` user updated · `400` incomplete data · `404` user not found |
-| `PATCH` | `/utents/:id` | at least one of `name`, `surname`, `email` | `200` partial update · `400` no valid field · `404` user not found |
-| `DELETE` | `/utents/:id` | — | `200` user deleted · `404` user not found |
+| `GET` | `/users` | — | `200` list of all users |
+| `GET` | `/users/:id` | — | `200` user · `404` user not found |
+| `POST` | `/users` | `name`, `surname`, `email` (all required) | `201` created user with its `id` · `400` missing data |
+| `PUT` | `/users/:id` | `name`, `surname`, `email` (all required) | `200` user updated · `400` incomplete data · `404` user not found |
+| `PATCH` | `/users/:id` | at least one of `name`, `surname`, `email` | `200` partial update · `400` no valid field · `404` user not found |
+| `DELETE` | `/users/:id` | — | `200` user deleted · `404` user not found |
  
 `PATCH` builds the query **dynamically**: it only updates the fields present in the body.
  
@@ -139,7 +139,7 @@ On a server or database error, every endpoint responds with **500**.
 |---|---|---|---|
 | `GET` | `/intervalli` | — (optional query-string filters, see below) | `200` list of intervals |
 | `GET` | `/intervalli/:id` | — | `200` interval · `404` interval not found |
-| `POST` | `/intervalli` | `data_inizio`, `data_fine`, `utent_id` (all required) | `201` created interval with its `id` · `400` missing data |
+| `POST` | `/intervalli` | `data_inizio`, `data_fine`, `user_id` (all required) | `201` created interval with its `id` · `400` missing data |
 | `PATCH` | `/intervalli/:id` | `data_inizio`, `data_fine` (both required) | `200` updated · `400` missing dates or `data_fine` earlier than `data_inizio` · `404` interval not found |
 | `DELETE` | `/intervalli/:id` | — | `200` deleted · `404` interval not found · `409` the interval has linked goals in `tabellaPonte` |
  
@@ -159,7 +159,7 @@ GET /intervalli?data_inizio=2026-01-01&data_fine=2026-03-31
 GET /intervalli?goal_id=2&data_inizio=2026-01-01
 ```
  
-Each result contains `id`, `goal_id`, `data_inizio`, `data_fine`, `utent_id`. The query uses a `JOIN` with `tabellaPonte`, so **only intervals linked to at least one goal** are returned, and an interval linked to several goals appears once per goal.
+Each result contains `id`, `goal_id`, `data_inizio`, `data_fine`, `user_id`. The query uses a `JOIN` with `tabellaPonte`, so **only intervals linked to at least one goal** are returned, and an interval linked to several goals appears once per goal.
  
 #### 🔗 Junction table — `/tabellaPonte`
  
@@ -175,14 +175,14 @@ Each result contains `id`, `goal_id`, `data_inizio`, `data_fine`, `utent_id`. Th
  
 ```bash
 # Create a user
-curl -X POST http://localhost:3000/utents \
+curl -X POST http://localhost:3000/users \
   -H "Content-Type: application/json" \
   -d '{"name": "Mario", "surname": "Rossi", "email": "mario.rossi@example.com"}'
  
 # Create an interval for user 1
 curl -X POST http://localhost:3000/intervalli \
   -H "Content-Type: application/json" \
-  -d '{"data_inizio": "2026-01-01", "data_fine": "2026-01-31", "utent_id": 1}'
+  -d '{"data_inizio": "2026-01-01", "data_fine": "2026-01-31", "user_id": 1}'
  
 # Link interval 1 to goal 2
 curl -X POST http://localhost:3000/tabellaPonte \

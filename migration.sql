@@ -5,8 +5,8 @@ CREATE DATABASE meditActiveDB;
 USE meditActiveDB;
 
 
--- ccreate utents's table where we save the utents's datas --
-CREATE TABLE utents(
+-- ccreate users's table where we save the users's datas --
+CREATE TABLE users(
   PRIMARY KEY (id),
   id INT AUTO_INCREMENT,    
   name VARCHAR(50) NOT NULL,    -- max 50 caracters --
@@ -28,13 +28,13 @@ CREATE TABLE intervalli (
  id INT AUTO_INCREMENT,
  data_inizio DATE NOT NULL,
  data_fine DATE NOT NULL,
- utent_id INT NOT NULL,
- FOREIGN KEY (utent_id) REFERENCES utents(id) NOT NULL,      -- reference of  id's utents table --
+ user_id INT NOT NULL,
+ FOREIGN KEY (user_id) REFERENCES users(id) NOT NULL,      -- reference of  id's users table --
  PRIMARY KEY (id)
 ) ;
 
 
--- table that connect data's of intervalli and datas of utents together --
+-- table that connect data's of intervalli and datas of users together --
 CREATE TABLE tabellaPonte (
 intervallo_id INT,
 goal_id INT,

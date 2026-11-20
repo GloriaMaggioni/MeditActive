@@ -3,7 +3,7 @@
 const errorHandler  = (err,req,res,next) =>{
     let statusCode = 500;
     let message = '';
-     let error = '';
+    let error = '';
 
     switch(err.code) {
         case 'ER_DUP_ENTRY':
