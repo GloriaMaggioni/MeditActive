@@ -27,6 +27,12 @@ const errorHandler  = (err,req,res,next) =>{
         message = 'Check the datas and their format'
         break;
 
+        case 'INVALID_ID':         // INVALID ID
+        statusCode = 400;
+        error = ' Id not valid';
+        message = 'Insert a valid id.It must be  a integer number';
+        break;
+
         default :
         statusCode = 500;
         error = 'Interval Server Error'

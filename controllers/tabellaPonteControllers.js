@@ -1,4 +1,6 @@
 import pool from "../config/db.js";
+import checkId from "../utils/checkId.js";
+
 
 
 // GET
@@ -44,13 +46,22 @@ const addNewDatas = async (req, res, next) =>{
 };
 
 
-//PATCH
+
 // create with the purpose to change the status' value
-const updateDatas = async (req, res, next) =>{
+const updateDatas = async (req, res, next) =>{                    //PATCH
     try{
       
         const {intervallo_id, goal_id} = req.params;
+        const controlIntervalloId = checkId(intervallo_id);
+        const controlGoalId = checkId(goal_id)
         const {status} = req.body;
+
+        if(controlIntervalloId){
+            return next(controlIntervalloId)
+        };
+        if(controlGoalId){
+            return next(controlGoalId)
+        }
 
         const validateStatus = ['active', 'finished', 'deleted', 'suspended'];
         if(!validateStatus.includes(status)){

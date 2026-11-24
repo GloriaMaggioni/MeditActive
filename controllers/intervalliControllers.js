@@ -1,6 +1,7 @@
 // logica relativa ai dati deli intervalli dei goals
 
-import pool from "../config/db.js"
+import pool from "../config/db.js";
+import checkId from "../utils/checkId.js";
 
 
 const checkDate = (data_inizio, data_fine) =>{
@@ -85,6 +86,12 @@ const checkDate = (data_inizio, data_fine) =>{
  const getIntervalliById = async (req,res, next) =>{
     try{
         const intervalloId = req.params.id;
+        const controlId = checkId(intervalloId);
+
+
+        if (controlId){
+            return next(controlId)
+        }
         const [rows] = await pool.execute('SELECT * FROM intervalli WHERE id = ?', [intervalloId]);
 
         if(rows.length === 0){

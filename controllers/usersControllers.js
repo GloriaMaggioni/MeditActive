@@ -1,11 +1,12 @@
 // logica relativa ai dati users
 
-import pool from '../config/db.js'
+import pool from '../config/db.js';
+import checkId from '../utils/checkId.js';
 
 
 
 // method to get all users
- const  getAllUsers = async (req, res, next) =>{
+ const  getAllUsers = async (req, res, next) =>{         // GET (all)
     try{
         const [rows] = await pool.execute('SELECT * FROM users')
         res.json(rows);        
@@ -16,9 +17,14 @@ import pool from '../config/db.js'
 };
 
 // method to get the specifi users's ID
-const getUserId = async  (req,res,next) =>{
+const getUserId = async  (req,res,next) =>{       // GET ID
     try{
         const userId = req.params.id;
+        const controlId = checkId(userId);
+
+        if (controlId){
+            return next(controlId);
+        }
         const [rows] = await pool.execute( 'SELECT * FROM users WHERE id = ? ', [userId]);
 
         if (rows.length === 0){
@@ -36,8 +42,8 @@ const getUserId = async  (req,res,next) =>{
 
 
 // method to create new user on the db  POST
-const addNewUser = async (req, res, next) =>{
-    
+const addNewUser = async (req, res, next) =>{               // POST
+     
     try{
         const {name,surname,email} = req.body;
 
@@ -63,7 +69,7 @@ const addNewUser = async (req, res, next) =>{
 
 // delete an user method
 
-const deleteUser = async (req, res,next) =>{
+const deleteUser = async (req, res,next) =>{               // DELETE
     try{
          const userId = req.params.id;
          const [result] = await pool.execute('DELETE FROM users WHERE id=?', [userId])
@@ -87,8 +93,8 @@ const deleteUser = async (req, res,next) =>{
 
 
 // method for update the user
-  // PUT
-const userUpdate = async(req, res,next) =>{
+ 
+const userUpdate = async(req, res,next) =>{           // PUT
     try{
          const id = req.params.id;
         const {name,surname,email} = req.body;
@@ -119,8 +125,8 @@ const userUpdate = async(req, res,next) =>{
     };
 };
 
-  // PATCH
-const updateUserPatch = async (req, res, next) =>{
+
+const updateUserPatch = async (req, res, next) =>{            // PATCH
     try {
         const id = req.params.id;
         const {name,surname,email} = req.body;
