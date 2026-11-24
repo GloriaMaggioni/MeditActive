@@ -8,17 +8,17 @@ const checkDate = (data_inizio, data_fine) =>{
 
    
     if(!data_inizio || !data_fine){
-        return 'Datas not correct: insert data of beginning and data of ending'
+        return 'Data not correct: insert date of beginning and date of ending'
     }else if(isNaN(new Date(data_inizio)) || isNaN(new Date(data_fine))){
         return 'Date not valid. Use only numbers and used this date format : YYYY-MM-DD'
     }else if(data_fine < data_inizio){
-         return 'Insert valid datas: date not valid.The end date must be later than the start date'
+         return 'Insert valid data: date not valid.The end date must be later than the start date'
     }
 }
 
 
-// method to take all of intervalli    // GET 
- const getAllIntervalli = async (req,res, next) =>{
+// method to take all of intervals    // GET 
+ const getAllIntervals = async (req,res, next) =>{
     try{
         const {goal_id, data_inizio, data_fine} = req.query;
         const conditions = [];
@@ -83,7 +83,7 @@ const checkDate = (data_inizio, data_fine) =>{
 
 
  //GET ID
- const getIntervalliById = async (req,res, next) =>{
+ const getIntervalsById = async (req,res, next) =>{
     try{
         const intervalloId = req.params.id;
         const controlId = checkId(intervalloId);
@@ -108,8 +108,8 @@ const checkDate = (data_inizio, data_fine) =>{
  };   
 
 
- // method to creare a new intervallo     // POST
- const createNewIntervalli = async (req,res, next) =>{
+ // method to creare a new interval    // POST
+ const createNewInterval = async (req,res, next) =>{
     try{
         const {data_inizio, data_fine,user_id} = req.body;
         const validateDate = checkDate(data_inizio, data_fine);
@@ -139,7 +139,7 @@ const checkDate = (data_inizio, data_fine) =>{
  };
 
   //PATCH
- const updateIntervalli = async (req,res, next) =>{
+ const updateIntervals = async (req,res, next) =>{
     try{
         const {data_inizio, data_fine} = req.body;
         const {id} = req.params;
@@ -170,7 +170,7 @@ const checkDate = (data_inizio, data_fine) =>{
   } ;
 
  // DELETE
- const deleteIntervalli = async (req,res, next) =>{
+ const deleteIntervals = async (req,res, next) =>{
     try{
         const intervalloId = req.params.id;
         const [result] = await pool.execute('DELETE  FROM intervalli WHERE id =?', [intervalloId]);
@@ -188,11 +188,11 @@ const checkDate = (data_inizio, data_fine) =>{
     } catch(err){
         if (err.code === 'ER_ROW_IS_REFERENCED_2'){
             res.status(409).json({
-                err: 'Cannot delete this interval: it has linked goals'
+                err: 'Cannot deleted this interval: it has linked goals'
             })
         }else {
              res.status(500).json({
-            err: 'Error during the elimination of the interval selected'
+            err: 'Error during the elimination of the selected interval'
         })
         }
        
@@ -203,7 +203,7 @@ const checkDate = (data_inizio, data_fine) =>{
 
   
 
-export default  {getAllIntervalli,createNewIntervalli, getIntervalliById, updateIntervalli, deleteIntervalli};
+export default  {getAllIntervals,createNewInterval, getIntervalsById, updateIntervals, deleteIntervals};
 
 
 

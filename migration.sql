@@ -24,7 +24,7 @@ PRIMARY KEY (id)
 
 
 -- create the intervalli's table where we save the datas aboout the intervals of every goals --
-CREATE TABLE intervalli (
+CREATE TABLE intervalli (     -- intervals--
  id INT AUTO_INCREMENT,
  data_inizio DATE NOT NULL,
  data_fine DATE NOT NULL,
@@ -35,7 +35,7 @@ CREATE TABLE intervalli (
 
 
 -- table that connect data's of intervalli and datas of users together --
-CREATE TABLE tabellaPonte (
+CREATE TABLE tabellaPonte (     -- intervalGoals --
 intervallo_id INT,
 goal_id INT,
 status ENUM ('active', 'finished', 'deleted', 'suspended') NOT NULL DEFAULT 'active',

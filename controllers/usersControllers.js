@@ -49,7 +49,7 @@ const addNewUser = async (req, res, next) =>{               // POST
 
         if(!name || !surname || !email){
             res.status(400).json({
-                message: 'Enter datas correncly. Enter name,surname and email'
+                message: 'Invalid data. Please provide name, surname and email.'
             })
             return;
         }else{
@@ -92,7 +92,7 @@ const deleteUser = async (req, res,next) =>{               // DELETE
 
 
 
-// method for update the user
+//update a user
  
 const userUpdate = async(req, res,next) =>{           // PUT
     try{
@@ -101,7 +101,7 @@ const userUpdate = async(req, res,next) =>{           // PUT
 
         if(!name || !surname || !email){
             res.status(400).json({
-                error: 'Incompleted datas'
+                error: 'Missing data. Name, surname and email are required.'
             })
             return;
         }
@@ -110,7 +110,7 @@ const userUpdate = async(req, res,next) =>{           // PUT
 
          if(result.affectedRows === 0){
              res.status(404).json({
-                error: 'Upload did not take place'
+                error: 'User not found'
              })
          }else{
              res.status(200).json({

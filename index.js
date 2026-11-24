@@ -1,8 +1,8 @@
 import express from 'express';
-import router from './routes/users.js'
-import rotta from './routes/goals.js';
-import road from './routes/intervalli.js';
-import rotte from './routes/tabellaPonte.js'
+import usersRouter from './routes/users.js'
+import goalsRouter from './routes/goals.js';
+import intervalsRouter from './routes/intervals.js';
+import intervalGoalsRouter from './routes/intervalGoals.js'
 import errorHandler from './middleware/errorHandler.js'
 
 var app = express();
@@ -11,12 +11,12 @@ app.use(express.json());
 
 
 app.get('/', (req, res) =>{
-   res.send('Ciaoooo!')
+   res.send('HIIII!')
 })
-app.use('/users', router);
-app.use('/goals', rotta);
-app.use('/intervalli', road);
-app.use('/tabellaPonte', rotte);
+app.use('/users', usersRouter);
+app.use('/goals', goalsRouter);
+app.use('/intervals', intervalsRouter);
+app.use('/intervalGoals', intervalGoalsRouter);
 
 
 app.use((req,res) =>{
@@ -27,7 +27,7 @@ app.use((req,res) =>{
 
 app.use(errorHandler)
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 
 
 

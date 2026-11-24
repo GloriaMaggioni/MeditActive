@@ -7,7 +7,7 @@ import checkId from "../utils/checkId.js";
 const getAllDatas = async (req,res, next) =>{
 
     try{
-        /* query per unire table itervalli e table goals in tabellaPonte*/
+        //Query to join the intervals table and the goals table into a intervalGoals table
         const [rows] = await pool.execute(`
         SELECT goals.name, intervalli.data_inizio, intervalli.data_fine, tabellaPonte.intervallo_id, tabellaPonte.goal_id, tabellaPonte.status
           FROM tabellaPonte
@@ -37,7 +37,7 @@ const addNewDatas = async (req, res, next) =>{
                 INSERT INTO tabellaPonte (intervallo_id, goal_id) VALUES (?,?)`,
                 [intervallo_id,goal_id]);
             res.status(201).json({
-                message: "Goal's datas successfully merged with intervallo's datas"
+                message: "Goal's data successfully added to interval's data"
             })
         }
     }catch(err){
@@ -79,7 +79,7 @@ const updateDatas = async (req, res, next) =>{                    //PATCH
             })
         }else{
             res.status(200).json({
-                message:  'Update complete successfully'
+                message:  'Update completed successfully'
             })
         }
 
