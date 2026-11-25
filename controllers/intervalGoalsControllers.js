@@ -4,17 +4,23 @@ import checkId from "../utils/checkId.js";
 
 
 // GET
-const getAllDatas = async (req,res, next) =>{
+const getIntervalGoal = async (req,res, next) =>{
 
     try{
-        //Query to join the intervals table and the goals table into a intervalGoals table
+        const intervalId = req.params.id;
+        const controlId = checkId(intervalId);
+
+        if(controlId){
+            return next(controlId)
+        }
         const [rows] = await pool.execute(`
         SELECT goals.name, intervalli.data_inizio, intervalli.data_fine, tabellaPonte.intervallo_id, tabellaPonte.goal_id, tabellaPonte.status
           FROM tabellaPonte
             JOIN intervalli ON tabellaPonte.intervallo_id = intervalli.id
-            JOIN goals ON tabellaPonte.goal_id = goals.id;
+            JOIN goals ON tabellaPonte.goal_id = goals.id
+            WHERE tabellaPonte.intervallo_id = ?
 
-         `);
+         `, [intervalId]);
          res.status(200).json(rows);
 
     }catch(err){
@@ -27,7 +33,14 @@ const getAllDatas = async (req,res, next) =>{
 
 const addNewDatas = async (req, res, next) =>{
     try{
-        const {intervallo_id, goal_id} = req.body;
+        const intervallo_id = req.params.id;
+        const  {goal_id }= req.body;
+        const controlId = checkId(intervallo_id);
+        console.log(intervallo_id)
+
+        if(controlId){
+            return next(controlId)
+        }
         if (!intervallo_id || !goal_id){
             res.status(400).json({
                 err: "Insert correct datas"
@@ -90,7 +103,7 @@ const updateDatas = async (req, res, next) =>{                    //PATCH
 
 
 
-export default {getAllDatas, addNewDatas, updateDatas}
+export default {getIntervalGoal, addNewDatas, updateDatas}
 
 
 

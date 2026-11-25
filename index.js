@@ -16,7 +16,9 @@ app.get('/', (req, res) =>{
 app.use('/users', usersRouter);
 app.use('/goals', goalsRouter);
 app.use('/intervals', intervalsRouter);
-app.use('/intervalGoals', intervalGoalsRouter);
+app.use('/intervals', intervalGoalsRouter);
+app.use('/intervals/:id/goals', intervalGoalsRouter);
+
 
 
 app.use((req,res) =>{
