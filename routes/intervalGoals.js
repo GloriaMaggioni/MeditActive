@@ -7,8 +7,8 @@ const intervalGoalsRouter = express.Router({mergeParams: true})
 
 intervalGoalsRouter.get('/', intervalGoalsControllers.getIntervalGoal);   // GET
 
-intervalGoalsRouter.post('/:id/goals', intervalGoalsControllers.addNewDatas);  // POST
+intervalGoalsRouter.post('/:id/goals', intervalGoalsControllers.addGoalToInterval);  // POST
 
-intervalGoalsRouter.patch('/:intervallo_id/goals/:goal_id', intervalGoalsControllers.updateDatas);  // PATCH
+intervalGoalsRouter.patch('/:intervallo_id/goals/:goal_id', intervalGoalsControllers.updateData);  // PATCH
 
 export default intervalGoalsRouter

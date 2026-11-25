@@ -31,7 +31,7 @@ const getIntervalGoal = async (req,res, next) =>{
 
 // POST
 
-const addNewDatas = async (req, res, next) =>{
+const addGoalToInterval = async (req, res, next) =>{
     try{
         const intervallo_id = req.params.id;
         const  {goal_id }= req.body;
@@ -61,7 +61,7 @@ const addNewDatas = async (req, res, next) =>{
 
 
 // create with the purpose to change the status' value
-const updateDatas = async (req, res, next) =>{                    //PATCH
+const updateData = async (req, res, next) =>{                    //PATCH
     try{
       
         const {intervallo_id, goal_id} = req.params;
@@ -103,7 +103,7 @@ const updateDatas = async (req, res, next) =>{                    //PATCH
 
 
 
-export default {getIntervalGoal, addNewDatas, updateDatas}
+export default {getIntervalGoal, addGoalToInterval, updateData}
 
 
 
